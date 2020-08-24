@@ -42,7 +42,7 @@
       <form @submit.prevent="saveEntity">
         <div class="form-group row justify-content-md-center">
           <label for="first" class="col-2">First:</label>
-          <div class="col-2">
+          <div class="col-sm-6 col-md-6 col-lg-2 ">
             <input
               type="text"
               class="form-control"
@@ -54,7 +54,7 @@
         </div>
         <div class="form-group row justify-content-md-center">
           <label for="second" class="col-2">Second:</label>
-          <div class="col-2">
+          <div class="col-sm-6 col-md-6 col-lg-2">
             <input
               type="text"
               class="form-control"
@@ -65,10 +65,10 @@
           </div>
         </div>
         <div class="form-group row justify-content-md-center">
-          <div class="col-2">
+          <div class="col-sm-6 col-md-6 col-lg-2">
             <input type="button" class="btn btn-block btn-dark" @click="back" value="Indietro" />
           </div>
-          <div class="col-2">
+          <div class="col-sm-6 col-md-6 col-lg-2">
             <button type="submit" class="btn btn-block btn-primary">{{titleForm}}</button>
           </div>
         </div>
