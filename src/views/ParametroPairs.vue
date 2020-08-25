@@ -25,7 +25,7 @@
           <td>{{ row.first_cv}}</td>
           <td>{{ row.second_cv}}</td>
           <td>
-            <a href="#" @click="editEntity(row.id)">
+            <a href="#" @click="prepareEdit(row.id)">
               <i class="far fa-edit"></i>
             </a>
             <a href="#" @click="deleteEntity(row.id)">
@@ -42,7 +42,7 @@
       <form @submit.prevent="saveEntity">
         <div class="form-group row justify-content-md-center">
           <label for="first" class="col-2">First:</label>
-          <div class="col-sm-6 col-md-6 col-lg-2 ">
+          <div class="col-sm-6 col-md-6 col-lg-2">
             <input
               type="text"
               class="form-control"
@@ -88,6 +88,7 @@ export default {
       urlApi: 'https://gcrypto.herokuapp.com',
       service: '/parametro-pair-cvs',
       titleForm: 'Salva',
+      currentId: null,
     };
   },
   created() {
@@ -95,8 +96,24 @@ export default {
   },
   methods: {
     saveEntity() {
+      if (this.currentId) {
+        return axios
+          .put(`${this.urlApi + this.service}/${this.currentId}`, this.parametroPair, {
+            headers: {
+              Accept: 'application/json',
+              'Content-type': 'application/json',
+            },
+          })
+          .then((response) => {
+            this.visualizzaForm = false;
+            this.getAllEntities();
+            return response.data;
+          })
+          .catch(error => `An error occured..${error}`);
+      }
+
       return axios
-        .post(this.urlApi + this.service, this.parametroPair, {
+        .post(`${this.urlApi + this.service}`, this.parametroPair, {
           headers: {
             Accept: 'application/json',
             'Content-type': 'application/json',
@@ -110,6 +127,7 @@ export default {
         .catch(error => `An error occured..${error}`);
     },
     prepareInsert() {
+      this.currentId = null;
       this.parametroPair = {};
       this.visualizzaForm = true;
     },
@@ -127,7 +145,8 @@ export default {
           this.list = response.data;
         });
     },
-    editEntity(id) {
+    prepareEdit(id) {
+      this.currentId = id;
       axios
         .get(`${this.urlApi + this.service}/${id}`)
         .then((response) => {
