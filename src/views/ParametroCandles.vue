@@ -30,7 +30,7 @@
             <td>{{row.perc_alert}}</td>
             <td>{{row.bearish_bullish_count}}</td>
             <td>
-              <a href="#" @click="editCandle(row.id)">
+              <a href="#" @click="prepareEdit(row.id)">
                 <i class="far fa-edit"></i>
               </a>
               <a href="#" @click="deleteCandle(row.id)">
@@ -153,6 +153,7 @@ export default {
       service: '/parametro-candle-cvs',
       servicePairs: '/parametro-pair-cvs',
       parametroPairs: [],
+      currentId: null,
     };
   },
   created() {
@@ -161,6 +162,21 @@ export default {
   },
   methods: {
     saveCandle() {
+      if (this.currentId) {
+        return axios
+          .put(`${this.urlApi + this.service}/${this.currentId}`, this.parametroCandle, {
+            headers: {
+              Accept: 'application/json',
+              'Content-type': 'application/json',
+            },
+          })
+          .then((response) => {
+            this.visualizzaForm = false;
+            this.getAllEntities();
+            return response.data;
+          })
+          .catch(error => `An error occured..${error}`);
+      }
       return axios
         .post(this.urlApi + this.service, this.parametroCandle, {
           headers: {
@@ -178,6 +194,7 @@ export default {
     prepareInsert() {
       this.parametroCandle = {};
       this.visualizzaForm = true;
+      this.currentId = null;
     },
 
     deleteCandle(id) {
@@ -201,7 +218,8 @@ export default {
           this.parametroPairs = response.data;
         });
     },
-    editCandle(id) {
+    prepareEdit(id) {
+      this.currentId = id;
       axios
         .get(`${this.urlApi + this.service}/${id}`)
         .then((response) => {
