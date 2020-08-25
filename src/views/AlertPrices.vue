@@ -13,7 +13,7 @@
       <table class="table table-striped">
         <thead class="thead-dark">
           <tr>
-            <th>ID</th>
+            <th>Parametro Pair</th>
             <th>Price</th>
             <th>Enable</th>
             <th>Is support</th>
@@ -27,10 +27,10 @@
             <td>{{ row.flag_enable}}</td>
             <td>{{ row.is_support}}</td>
             <td>
-              <a href="#" @click="editEntity(row.id)">
+              <a href="#" @click="editAlert(row.id)">
                 <i class="far fa-edit"></i>
               </a>
-              <a href="#" @click="deleteEntity(row.id)">
+              <a href="#" @click="deleteAlert(row.id)">
                 <i class="far fa-trash-alt" />
               </a>
             </td>
@@ -40,34 +40,43 @@
     </div>
 
     <div class="container" v-if="visualizzaForm">
-      <form @submit.prevent="saveEntity">
-        <div class="form-row align-items-center">
-          <div class="col-auto">
-            <label class="sr-only" for="Price">Price</label>
-            <input type="text" class="form-control mb-2" v-model="alertPrice.price" />
+      <form @submit.prevent="saveAlert">
+        <div class="form-group row justify-content-md-center">
+            <label for="select" class="col-2">ID</label>
+            <select
+              v-model="alertPrice.id_parametro_pair_cv"
+              class="form-control col-3 col-sm-3 col-md-4 col-lg-2"
+            >
+              <option value="1">BTC/USDT</option>
+            </select>
           </div>
+        <div class="form-group row justify-content-md-center">
+          <label class="col-2" for="Price">Price</label>
+          <div class="col-sm-6 col-md-6 col-lg-2">
+            <input type="text" class="form-control" v-model="alertPrice.price" />
+          </div>
+        </div>
 
-          <!---->
-          <div class="col-auto">
-            <div class="form-check mb-2">
-              <label class="form-check-label" for="Enable">Enable</label>
-              <input class="form-check-input" type="checkbox" v-model="alertPrice.flag_enable" />
-            </div>
+        <!---->
+        <div class="form-group row justify-content-md-center">
+          <div class="col-4 col-sm-2" for="Enable">Enable</div>
+          <div class="form-check col-4 col-sm-2">
+            <input class="form-check-input" type="checkbox" v-model="alertPrice.flag_enable" />
           </div>
+        </div>
 
-          <div class="col-auto">
-            <div class="form-check mb-2">
-              <label class="form-check-label" for="Support">Support</label>
-              <input class="form-check-input" type="checkbox" v-model="alertPrice.is_support" />
-            </div>
+        <div class="form-group row justify-content-md-center">
+          <div class="col-4 col-sm-2" for="Support">Support</div>
+          <div class="form-check  col-4 col-sm-2">
+            <input class="form-check-input" type="checkbox" v-model="alertPrice.is_support" />
           </div>
-          <div class="form-group row justify-content-md-center">
-            <div class="col-2">
-              <input type="button" class="btn btn-block btn-dark" @click="back" value="Indietro" />
-            </div>
-            <div class="col-2">
-              <button type="submit" class="btn btn-block btn-primary">{{titleForm}}</button>
-            </div>
+        </div>
+        <div class="form-group row justify-content-md-center">
+          <div class="col-4 col-md-2 col-lg-2">
+            <input type="button" class="btn btn-block btn-dark" @click="back" value="Indietro" />
+          </div>
+          <div class="col-4 col-md-2 col-lg-2">
+            <button type="submit" class="btn btn-block btn-primary">{{titleForm}}</button>
           </div>
         </div>
       </form>
@@ -93,7 +102,7 @@ export default {
     this.getAllEntities();
   },
   methods: {
-    saveEntity() {
+    saveAlert() {
       return axios.post(this.urlApi + this.service, this.alertPrice, {
         headers: {
           Accept: 'application/json',
@@ -110,7 +119,7 @@ export default {
       this.alertPrice = {};
       this.visualizzaForm = true;
     },
-    deleteEntity(id) {
+    deleteAlert(id) {
       axios
         .delete(`${this.urlApi + this.service}/${id}`)
         .then(() => this.getAllEntities());
@@ -122,7 +131,7 @@ export default {
           this.list = response.data;
         });
     },
-    editEntity(id) {
+    editAlert(id) {
       axios
         .get(`${this.urlApi + this.service}/${id}`)
         .then((response) => {

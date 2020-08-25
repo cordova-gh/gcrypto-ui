@@ -10,7 +10,7 @@
       <table class="table table-striped">
         <thead class="table table-dark">
           <tr>
-            <th>ID</th>
+            <th>Parametro Pair</th>
             <th>Intervallo</th>
             <th>Alert Low</th>
             <th>Alert Medium</th>
@@ -30,10 +30,10 @@
             <td>{{row.perc_alert}}</td>
             <td>{{row.bearish_bullish_count}}</td>
             <td>
-              <a href="#" @click="editEntity(row.id)">
+              <a href="#" @click="editCandle(row.id)">
                 <i class="far fa-edit"></i>
               </a>
-              <a href="#" @click="deleteEntity(row.id)">
+              <a href="#" @click="deleteCandle(row.id)">
                 <i class="far fa-trash-alt" />
               </a>
             </td>
@@ -41,87 +41,99 @@
         </tbody>
       </table>
     </div>
-    <div class="container" v-if="visualizzaForm">
-      <form @submit.prevent="saveEntity">
-        <div class="form-group row">
-          <label for="alert" class="col-sm-2 col-form-label">Intervallo:</label>
-          <div class="col-sm-10">
-            <input
-              type="text"
-              class="form-control col-2"
-              id="alert"
-              v-model="parametroCandle.intervallo"
-            />
+    <div class="container bg bg-light border rounded py-3" v-else>
+      <h3 class="bg-white">Form Parametro Candles</h3>
+      <div class="container">
+        <form @submit.prevent="saveCandle">
+          <div class="form-group row justify-content-md-center">
+            <label for="select" class="col-2">ID</label>
+            <select
+              v-model="parametroCandle.id_parametro_pair_cv"
+              class="form-control col-sm-5 col-md-5 col-lg-2"
+            >
+              <option value="1">BTC/USDT</option>
+            </select>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="alert" class="col-sm-2 col-form-label">Alert Low:</label>
-          <div class="col-sm-10">
-            <input
-              type="text"
-              class="form-control col-2"
-              id="alert"
-              v-model="parametroCandle.diff_alert_low"
-            />
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="alert" class="col-sm-2 col-form-label">Alert Medium:</label>
-          <div class="col-sm-10">
-            <input
-              type="text"
-              class="form-control col-2"
-              id="alert"
-              v-model="parametroCandle.diff_alert_medium"
-            />
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="alert" class="col-sm-2 col-form-label">Alert High:</label>
-          <div class="col-sm-10">
-            <input
-              type="text"
-              class="form-control col-2"
-              id="alert"
-              v-model="parametroCandle.diff_alert_high"
-            />
-          </div>
-        </div>
 
-        <!---->
-        <div class="form-group row">
-          <div class="col-sm-2">Percentual:</div>
-          <div class="col-sm-2">
-            <div class="form-check">
+          <div class="form-group row justify-content-md-center">
+            <label for="alert" class="col-2">Intervallo:</label>
+            <div class="col-sm-6 col-md-6 col-lg-2">
               <input
-                class="form-check-input"
-                type="checkbox"
+                type="text"
+                class="form-control"
+                id="alert"
+                v-model="parametroCandle.intervallo"
+              />
+            </div>
+          </div>
+          <div class="form-group row justify-content-md-center">
+            <label for="alert" class="col-2">Alert Low:</label>
+            <div class="col-sm-6 col-md-6 col-lg-2">
+              <input
+                type="text"
+                class="form-control"
+                id="alert"
+                v-model="parametroCandle.diff_alert_low"
+              />
+            </div>
+          </div>
+          <div class="form-group row justify-content-md-center">
+            <label for="alert" class="col-2">Alert Medium:</label>
+            <div class="col-sm-6 col-md-6 col-lg-2">
+              <input
+                type="text"
+                class="form-control"
+                id="alert"
+                v-model="parametroCandle.diff_alert_medium"
+              />
+            </div>
+          </div>
+          <div class="form-group row justify-content-md-center">
+            <label for="alert" class="col-2">Alert High:</label>
+            <div class="col-sm-6 col-md-6 col-lg-2">
+              <input
+                type="text"
+                class="form-control"
+                id="alert"
+                v-model="parametroCandle.diff_alert_high"
+              />
+            </div>
+          </div>
+
+          <!---->
+          <div class="form-group row justify-content-md-center">
+            <!-- form-group row-->
+            <div class="col-4 col-sm-2">Percentual:</div>
+            <div class="col-4 col-sm-2 col-md-6 col-lg-2">
+              <input
+                class="form-control"
+                type="text"
                 id="gridCheck1"
                 v-model="parametroCandle.perc_alert"
               />
             </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-sm-2">BB Count:</div>
-          <div class="col-sm-2">
-            <div class="form-check">
+          <div class="form-group row justify-content-md-center">
+            <div class="col-4 col-sm-2">BB Count:</div>
+            <div class="col-4 col-sm-2 col-md-6 col-lg-2">
               <input
-                class="form-check-input"
-                type="checkbox"
+                class="form-control"
+                type="text"
                 id="gridCheck1"
                 v-model="parametroCandle.bearish_bullish_count"
               />
             </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-sm-5">
-            <input type="botton" class="btn btn-dark" @click="back" value="Back" />
-            <button type="submit" class="btn btn-primary">Salva</button>
+          <div class="form-group row justify-content-md-center">
+            <div class="col-sm-6 col-md-6 col-lg-2">
+              <input type="botton" class="btn btn-dark col-4 col-sm-8" @click="back" value="Back" />
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-2">
+              <button type="submit" class="btn btn-primary col-4 col-sm-8">Salva</button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -143,9 +155,9 @@ export default {
     this.getAllEntities();
   },
   methods: {
-    saveEntity() {
+    saveCandle() {
       return axios
-        .post(this.urlApi + this.service, this.parametroPair, {
+        .post(this.urlApi + this.service, this.parametroCandle, {
           headers: {
             Accept: 'application/json',
             'Content-type': 'application/json',
@@ -163,12 +175,12 @@ export default {
       this.visualizzaForm = true;
     },
 
-    deleteEntity(id) {
+    deleteCandle(id) {
       axios
         .delete(`${this.urlApi + this.service}/${id}`)
-        .then(() => {
-          this.getAllEntities();
-        });
+        .then(() =>
+          this.getAllEntities(),
+        );
     },
     getAllEntities() {
       axios
@@ -177,7 +189,7 @@ export default {
           this.list = response.data;
         });
     },
-    editEntity(id) {
+    editCandle(id) {
       axios
         .get(`${this.urlApi + this.service}/${id}`)
         .then((response) => {
