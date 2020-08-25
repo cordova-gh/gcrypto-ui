@@ -46,12 +46,14 @@
       <div class="container">
         <form @submit.prevent="saveCandle">
           <div class="form-group row justify-content-md-center">
-            <label for="select" class="col-2">ID</label>
+            <label for="select" class="col-2">Parametro Pair:</label>
             <select
               v-model="parametroCandle.id_parametro_pair_cv"
               class="form-control col-sm-5 col-md-5 col-lg-2"
             >
-              <option value="1">BTC/USDT</option>
+              <option v-for="(row,index) of parametroPairs" :key="index" v-bind:value="row.id">
+                {{row.first_cv +'/'+ row.second_cv}}
+              </option>
             </select>
           </div>
 
@@ -149,10 +151,13 @@ export default {
       parametroCandle: {},
       urlApi: 'https://gcrypto.herokuapp.com',
       service: '/parametro-candle-cvs',
+      servicePairs: '/parametro-pair-cvs',
+      parametroPairs: [],
     };
   },
   created() {
     this.getAllEntities();
+    this.getParametriPairs();
   },
   methods: {
     saveCandle() {
@@ -187,6 +192,13 @@ export default {
         .get(this.urlApi + this.service)
         .then((response) => {
           this.list = response.data;
+        });
+    },
+    getParametriPairs() {
+      axios
+        .get(this.urlApi + this.servicePairs)
+        .then((response) => {
+          this.parametroPairs = response.data;
         });
     },
     editCandle(id) {
