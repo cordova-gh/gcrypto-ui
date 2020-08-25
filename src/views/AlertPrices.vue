@@ -47,7 +47,9 @@
               v-model="alertPrice.id_parametro_pair_cv"
               class="form-control col-3 col-sm-3 col-md-4 col-lg-2"
             >
-              <option value="1">BTC/USDT</option>
+            <option v-for="(row,index) of parametroPairs" :key="index" v-bind:value="row.id">
+                {{row.first_cv + '/' + row.second_cv}}
+                </option>
             </select>
           </div>
         <div class="form-group row justify-content-md-center">
@@ -95,11 +97,13 @@ export default {
       visualizzaForm: false,
       urlApi: 'https://gcrypto.herokuapp.com',
       service: '/alert-prices',
+      servicePair: '/parametro-pair-cvs',
       titleForm: 'Salva',
     };
   },
   created() {
     this.getAllEntities();
+    this.getParametroPair();
   },
   methods: {
     saveAlert() {
@@ -118,6 +122,13 @@ export default {
     prepareInsert() {
       this.alertPrice = {};
       this.visualizzaForm = true;
+    },
+    getParametroPair() {
+      axios
+        .get(this.urlApi + this.servicePair)
+        .then((response) => {
+          this.parametroPairs = response.data;
+        });
     },
     deleteAlert(id) {
       axios
