@@ -27,7 +27,7 @@
             <td>{{ row.flag_enable}}</td>
             <td>{{ row.is_support}}</td>
             <td>
-              <a href="#" @click="editAlert(row.id)">
+              <a href="#" @click="prepareEdit(row.id)">
                 <i class="far fa-edit"></i>
               </a>
               <a href="#" @click="deleteAlert(row.id)">
@@ -99,6 +99,7 @@ export default {
       service: '/alert-prices',
       servicePair: '/parametro-pair-cvs',
       titleForm: 'Salva',
+      currentId: null,
     };
   },
   created() {
@@ -107,6 +108,21 @@ export default {
   },
   methods: {
     saveAlert() {
+      if (this.currentId) {
+        return axios
+          .put(`${this.urlApi + this.service}/${this.currentId}`, this.alertPrice, {
+            headers: {
+              Accept: 'application/json',
+              'Content-type': 'application/json',
+            },
+          })
+          .then((response) => {
+            this.visualizzaForm = false;
+            this.getAllEntities();
+            return response.data;
+          })
+          .catch(error => `An error occured..${error}`);
+      }
       return axios.post(this.urlApi + this.service, this.alertPrice, {
         headers: {
           Accept: 'application/json',
@@ -122,6 +138,7 @@ export default {
     prepareInsert() {
       this.alertPrice = {};
       this.visualizzaForm = true;
+      this.currentId = null;
     },
     getParametroPair() {
       axios
@@ -142,7 +159,8 @@ export default {
           this.list = response.data;
         });
     },
-    editAlert(id) {
+    prepareEdit(id) {
+      this.currentId = id;
       axios
         .get(`${this.urlApi + this.service}/${id}`)
         .then((response) => {
