@@ -42,16 +42,18 @@
     <div class="container" v-if="visualizzaForm">
       <form @submit.prevent="saveAlert">
         <div class="form-group row justify-content-md-center">
-            <label for="select" class="col-2">ID</label>
-            <select
-              v-model="alertPrice.id_parametro_pair_cv"
-              class="form-control col-3 col-sm-3 col-md-4 col-lg-2"
-            >
-            <option v-for="(row,index) of parametroPairs" :key="index" v-bind:value="row.id">
-                {{row.first_cv + '/' + row.second_cv}}
-                </option>
-            </select>
-          </div>
+          <label for="select" class="col-2">ID</label>
+          <select
+            v-model="alertPrice.id_parametro_pair_cv"
+            class="form-control col-3 col-sm-3 col-md-4 col-lg-2"
+          >
+            <option
+              v-for="(row,index) of parametroPairs"
+              :key="index"
+              v-bind:value="row.id"
+            >{{row.first_cv + '/' + row.second_cv}}</option>
+          </select>
+        </div>
         <div class="form-group row justify-content-md-center">
           <label class="col-2" for="Price">Price</label>
           <div class="col-sm-6 col-md-6 col-lg-2">
@@ -69,7 +71,7 @@
 
         <div class="form-group row justify-content-md-center">
           <div class="col-4 col-sm-2" for="Support">Support</div>
-          <div class="form-check  col-4 col-sm-2">
+          <div class="form-check col-4 col-sm-2">
             <input class="form-check-input" type="checkbox" v-model="alertPrice.is_support" />
           </div>
         </div>
@@ -117,9 +119,11 @@ export default {
             },
           })
           .then((response) => {
-            this.visualizzaForm = false;
-            this.getAllEntities();
-            return response.data;
+            this.$swal('Alert Price', 'Salvataggio avvenuto con successo', 'success').then(() => {
+              this.visualizzaForm = false;
+              this.getAllEntities();
+              return response.data;
+            });
           })
           .catch(error => `An error occured..${error}`);
       }
@@ -130,9 +134,11 @@ export default {
         },
       })
         .then((response) => {
-          this.visualizzaForm = false;
-          this.getAllEntities();
-          return response.data;
+          this.$swal('Alert Price', 'Salvataggio avvenuto con successo', 'success').then(() => {
+            this.visualizzaForm = false;
+            this.getAllEntities();
+            return response.data;
+          });
         }).catch(error => `An error occured..${error}`);
     },
     prepareInsert() {
@@ -148,9 +154,25 @@ export default {
         });
     },
     deleteAlert(id) {
-      axios
-        .delete(`${this.urlApi + this.service}/${id}`)
-        .then(() => this.getAllEntities());
+      this.$swal({
+        title: 'Sei sicuro?',
+        text: 'La cancellazione è definita',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Procedi',
+        cancelButtonText: 'No',
+        showCloseButton: true,
+        showLoaderOnConfirm: true,
+      }).then((result) => {
+        if (result.value) {
+          axios
+            .delete(`${this.urlApi + this.service}/${id}`)
+            .then(() => {
+              this.$swal('Cancellato', 'Alert price cancellato', 'success');
+              this.getAllEntities();
+            });
+        }
+      });
     },
     getAllEntities() {
       axios
