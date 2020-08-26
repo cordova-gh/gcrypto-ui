@@ -10,13 +10,13 @@
         </a>
       </div>
 
-      <table class="table table-striped">
+      <table class="table table-responsive-sm table-striped">
         <thead class="thead-dark">
           <tr>
-            <th>Parametro Pair</th>
+            <th>Pair</th>
             <th>Price</th>
             <th>Enable</th>
-            <th>Is support</th>
+            <th>Support</th>
             <th>Azioni</th>
           </tr>
         </thead>
@@ -24,8 +24,8 @@
           <tr v-for="(row, index) of list" :key="index">
             <td>{{ row.id_parametro_pair_cv}}</td>
             <td>{{ row.price}}</td>
-            <td>{{ row.flag_enable}}</td>
-            <td>{{ row.is_support}}</td>
+            <td><input type="checkbox" onclick="return false;" v-model="row.flag_enable"/></td>
+            <td><input type="checkbox" onclick="return false;" v-model="row.is_support"/></td>
             <td>
               <a href="#" @click="prepareEdit(row.id)">
                 <i class="far fa-edit"></i>
@@ -38,7 +38,11 @@
         </tbody>
       </table>
     </div>
-
+    <div class="d-flex justify-content-center" v-if="showLoader">
+      <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
     <div class="container" v-if="visualizzaForm">
       <form @submit.prevent="saveAlert">
         <div class="form-group row justify-content-md-center">
@@ -102,6 +106,7 @@ export default {
       servicePair: '/parametro-pair-cvs',
       titleForm: 'Salva',
       currentId: null,
+      showLoader: false,
     };
   },
   created() {
@@ -110,6 +115,7 @@ export default {
   },
   methods: {
     saveAlert() {
+      this.showLoader = true;
       if (this.currentId) {
         return axios
           .put(`${this.urlApi + this.service}/${this.currentId}`, this.alertPrice, {
@@ -119,6 +125,7 @@ export default {
             },
           })
           .then((response) => {
+            this.showLoader = false;
             this.$swal('Alert Price', 'Salvataggio avvenuto con successo', 'success').then(() => {
               this.visualizzaForm = false;
               this.getAllEntities();
@@ -134,6 +141,7 @@ export default {
         },
       })
         .then((response) => {
+          this.showLoader = false;
           this.$swal('Alert Price', 'Salvataggio avvenuto con successo', 'success').then(() => {
             this.visualizzaForm = false;
             this.getAllEntities();
@@ -175,19 +183,23 @@ export default {
       });
     },
     getAllEntities() {
+      this.showLoader = true;
       axios
         .get(this.urlApi + this.service)
         .then((response) => {
           this.list = response.data;
+          this.showLoader = false;
         });
     },
     prepareEdit(id) {
+      this.showLoader = true;
       this.currentId = id;
       axios
         .get(`${this.urlApi + this.service}/${id}`)
         .then((response) => {
           this.alertPrice = response.data;
           this.visualizzaForm = true;
+          this.showLoader = false;
         });
     },
     back() {
