@@ -15,6 +15,7 @@
           <tr>
             <th>Pair</th>
             <th>Price</th>
+            <th>Diff to Price</th>
             <th>Enable</th>
             <th>Support</th>
             <th>Azioni</th>
@@ -22,8 +23,9 @@
         </thead>
         <tbody>
           <tr v-for="(row, index) of list" :key="index">
-            <td>{{ row.id_parametro_pair_cv}}</td>
-            <td>{{ row.price}}</td>
+            <td>{{row.id_parametro_pair_cv}}</td>
+            <td>{{row.price}}</td>
+             <td>{{row.diff_to_price}}</td>
             <td><input type="checkbox" onclick="return false;" v-model="row.flag_enable"/></td>
             <td><input type="checkbox" onclick="return false;" v-model="row.is_support"/></td>
             <td>
@@ -62,6 +64,13 @@
           <label class="col-2" for="Price">Price</label>
           <div class="col-sm-6 col-md-6 col-lg-2">
             <input type="text" class="form-control" v-model="alertPrice.price" />
+          </div>
+        </div>
+
+        <div class="form-group row justify-content-md-center">
+          <label class="col-2" for="diffToPrice">Diff to Price</label>
+          <div class="col-sm-6 col-md-6 col-lg-2">
+            <input type="text" class="form-control" v-model="alertPrice.diff_to_price" />
           </div>
         </div>
 
