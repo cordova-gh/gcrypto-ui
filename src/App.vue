@@ -6,7 +6,8 @@
         <router-link to="/about">About</router-link>|
         <router-link to="/parametro-pair-cvs">Parametri Pairs</router-link>|
         <router-link to="/parametro-candle-cvs">Parametri candles</router-link>|
-        <router-link to="/alert-prices">Alert Prices</router-link>
+        <router-link to="/alert-prices">Alert Prices</router-link>|
+        <router-link to="/candle-fast">Candle Fast</router-link>
       </div>
       <!-- Navbar content -->
     </nav>
