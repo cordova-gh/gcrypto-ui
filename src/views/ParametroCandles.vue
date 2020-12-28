@@ -15,6 +15,7 @@
             <th>Alert Low</th>
             <th>Alert Medium</th>
             <th>Alert High</th>
+            <th>Volume</th>
             <th>Percentual</th>
             <th>BB count</th>
             <th>Azioni</th>
@@ -27,6 +28,7 @@
             <td>{{row.diff_alert_low}}</td>
             <td>{{row.diff_alert_medium}}</td>
             <td>{{row.diff_alert_high}}</td>
+            <td>{{row.volume_alert}}</td>
             <td>{{row.perc_alert}}</td>
             <td>{{row.bearish_bullish_count}}</td>
             <td>
@@ -98,6 +100,17 @@
                 class="form-control"
                 id="alert"
                 v-model="parametroCandle.diff_alert_high"
+              />
+            </div>
+          </div>
+          <div class="form-group row justify-content-md-center">
+            <label for="alert" class="col-2">Volume:</label>
+            <div class="col-sm-6 col-md-6 col-lg-2">
+              <input
+                type="text"
+                class="form-control"
+                id="alert"
+                v-model="parametroCandle.volume_alert"
               />
             </div>
           </div>
